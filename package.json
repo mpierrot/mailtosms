@@ -8,5 +8,9 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "aws-cdk": "^2.167.1",
+    "typescript": "^5.6.3"
+  }
 }
