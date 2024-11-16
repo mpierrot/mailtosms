@@ -28,15 +28,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'  # 使用する Node.js のバージョンに変更
-
-      # 依存関係をインストール
-      - name: Install dependencies
-        run: npm install
-
-      # プロジェクトをビルド（必要に応じて）
-      - name: Build project
-        run: npm run build
-
+          
       # AWS 資格情報を設定（OIDC を利用して IAM ロールを引き受ける）
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
