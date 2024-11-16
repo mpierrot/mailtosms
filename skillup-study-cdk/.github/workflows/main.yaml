@@ -8,14 +8,15 @@ on:
 jobs:
   aws_cdk:
     runs-on: ubuntu-latest
-    env: 
-      AWS_REGION: "ap-northeast-1"
-      AWS_ROLE_ARN: ${{ secrets.AWS_OIDC_ROLE_ARN }}
-    
+
     permissions:
       id-token: write
       contents: read
 
+    env: 
+      AWS_REGION: "ap-northeast-1"
+      AWS_ROLE_ARN: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v3
