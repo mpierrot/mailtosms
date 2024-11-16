@@ -3,7 +3,7 @@ import { Construct } from 'constructs';
 // Import the Lambda module
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 
-export class HelloCdkStack extends cdk.Stack {
+export class skillupCdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
