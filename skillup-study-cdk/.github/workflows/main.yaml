@@ -4,16 +4,18 @@ on:
   push:
     branches:
         - main
-  pull_request:
+    type:
+      - closed
+env:
+  AWS_REGION: "ap-northeast-1"
+  AWS_ROLE_ARN: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/aws-identity-providers-federation-github-actions
+
 jobs:
-  aws_cdk:
-    runs-on: ubuntu-22.04
-    env: 
-      AWS_REGION: "ap-northeast-1"
-    
+  deploy:
     permissions:
       id-token: write
       contents: read
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout
@@ -23,9 +25,9 @@ jobs:
         run: npm ci
 
       - name: Assume Role
-        uses: aws-actions/configure-aws-credentials@v3
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: ${{ vars.AWS_OIDC_ROLE_ARN }} 
+          role-to-assume: ${{ env.AWS_ACCOUNT_ID }} 
           aws-region: ${{ env.AWS_REGION }}
           
       - name: CDK Diff Check
