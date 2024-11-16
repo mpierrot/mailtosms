@@ -1,43 +1,37 @@
-name: Deploy AWS CDK
+name: cdk
 
 on:
   push:
     branches:
-      - main
+        - master
   pull_request:
-    branches:
-      - main
-
-permissions:
-  id-token: write            # OIDC トークンの取得に必要
-  contents: read             # コードのチェックアウトに必要
-  # 必要に応じて他のパーミッションを追加
-
 jobs:
-  deploy:
-    if: github.event_name == 'push'
+  aws_cdk:
     runs-on: ubuntu-latest
+    env: 
+      AWS_REGION: "ap-northeast-1"
+    
+    permissions:
+      id-token: write
+      contents: read
 
     steps:
-      # リポジトリのコードをチェックアウト
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v3
 
-      # Node.js をセットアップ（CDK が TypeScript または JavaScript の場合）
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'  # 使用する Node.js のバージョンに変更
-          
-      # AWS 資格情報を設定（OIDC を利用して IAM ロールを引き受ける）
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::992382757667:role/aws-identity-providers-federation-github-actions
-          aws-region: ap-northeast-1  # 使用する AWS リージョンに変更
-          # Optional: Role session name
-          role-session-name: GitHubActionsSession
+      - name: Setup dependencies
+        run: npm ci
 
-      # CDK デプロイを実行
-      - name: Deploy CDK
-        run: npx cdk deploy --require-approval never
+      - name: Assume Role
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }} 
+          aws-region: ${{ env.AWS_REGION }}
+          
+      - name: CDK Diff Check
+        if: contains(github.event_name, 'pull_request')
+        run: npm run cdk:diff
+
+      - name: CDK Deploy
+        if: contains(github.event_name, 'push')
+        run: npm run cdk:deploy
