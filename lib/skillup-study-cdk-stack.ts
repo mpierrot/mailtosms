@@ -32,11 +32,19 @@ export class skillupCdkStack extends cdk.Stack {
     new cdk.CfnOutput(this, "myFunctionUrlOutput", {
       value: myFunctionUrl.url,
     })
-    // 追記 Python-runtime-lambdaの定義
+    // 追記 Python-runtime-lambda hello-python-funtionの定義
     new PythonFunction(this, "hello-python-function",{
       functionName: 'hello-python-function',
       runtime:cdk.aws_lambda.Runtime.PYTHON_3_11,
       entry:"src/lambda/hello",
+      handler:"handler",
+    });
+
+    // 追記 Python-runtime-lambda GetDynamoDBItemsの定義
+    new PythonFunction(this, "GetDynamoDBItems",{
+      functionName:"GetDynamoDBItems",
+      runtime:cdk.aws_lambda.Runtime.PYTHON_3_11,
+      entry:"src/lambda/GetDynamoDBItems",
       handler:"handler",
     });
 
