@@ -27,7 +27,7 @@ export class skillupCdkStack extends cdk.Stack {
       value: helloWorldFunctionUrl.url,
     });
     // 追記 Python-runtime-lambda hello-python-funtionの定義
-    const hellopythonfunction = new PythonFunction(this, "hellopythonfunction",{
+    const hellopythonfunction = new PythonFunction(this, "hello-python-function",{
       functionName: 'hello-python-function',
       runtime:cdk.aws_lambda.Runtime.PYTHON_3_11,
       entry:"src/lambda/hello",
