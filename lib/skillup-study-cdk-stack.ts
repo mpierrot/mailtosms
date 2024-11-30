@@ -11,7 +11,7 @@ export class skillupCdkStack extends cdk.Stack {
      const helloWorldFunction = new lambda.Function(this, "HelloWorldFunction", {
       functionName: "HelloWorldFunction", // Set function name
       runtime: lambda.Runtime.NODEJS_20_X, // Provide any supported Node.js runtime
-      handler: "app.handler", //Specify app.py and handler function
+      handler: "handler", //Specify index.py and handler function
       code: lambda.Code.fromAsset("src/lambda/hello-world"), // Specify the source code directory
     });
 
