@@ -7,31 +7,23 @@ import { PythonFunction } from '@aws-cdk/aws-lambda-python-alpha';
 export class skillupCdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
-
-    // Define the Lambda function resource
-    const myFunction = new lambda.Function(this, "HelloWorldFunction", {
+     // Define the Lambda function resource
+     const helloWorldFunction = new lambda.Function(this, "HelloWorldFunction", {
+      functionName: "HelloWorldFunction", // Set function name
       runtime: lambda.Runtime.NODEJS_20_X, // Provide any supported Node.js runtime
       handler: "index.handler",
-      code: lambda.Code.fromInline(`
-        exports.handler = async function(event) {
-          return {
-            statusCode: 200,
-            body: JSON.stringify('Hello World!'),
-          };
-        };
-      `),
+      code: lambda.Code.fromAsset("src/lambda/hello-world"), // Specify the source code directory
     });
 
-    // 追記 ここから
-    // Define the Lambda function URL resource
-    const myFunctionUrl = myFunction.addFunctionUrl({
+    // Add Function URL to the Lambda function
+    const helloWorldFunctionUrl = helloWorldFunction.addFunctionUrl({
       authType: lambda.FunctionUrlAuthType.NONE,
     });
 
     // Define a CloudFormation output for your URL
-    new cdk.CfnOutput(this, "myFunctionUrlOutput", {
-      value: myFunctionUrl.url,
-    })
+    new cdk.CfnOutput(this, "HelloWorldFunctionUrlOutput", {
+      value: helloWorldFunctionUrl.url,
+    });
     // 追記 Python-runtime-lambda hello-python-funtionの定義
     new PythonFunction(this, "hello-python-function",{
       functionName: 'hello-python-function',
