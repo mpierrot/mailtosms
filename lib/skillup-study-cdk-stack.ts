@@ -2,6 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 // Import the Lambda module
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { PythonFunction } from '@aws-cdk/aws-lambda-python-alpha';
 
 export class skillupCdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -31,6 +32,13 @@ export class skillupCdkStack extends cdk.Stack {
     new cdk.CfnOutput(this, "myFunctionUrlOutput", {
       value: myFunctionUrl.url,
     })
-    // 追記 ここまで
+    // 追記 Python-runtime-lambdaの定義
+    new PythonFunction(this, "hello-python-function",{
+      functionName: 'hello-python-function',
+      runtime:cdk.aws_lambda.Runtime.PYTHON_3_11,
+      entry:"src/lambda/hello",
+      handler:"handler",
+    });
+
   }
 }
